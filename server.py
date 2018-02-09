@@ -21,22 +21,27 @@ import json
 ####################################################
 # Environment Override
 if "DB_IP" in os.environ:
-	DB_IP = os.environ["DB_IP"]
+  DB_IP = os.environ["DB_IP"]
 
 if "DB_PORT" in os.environ:
-	DB_PORT = os.environ["DB_PORT"]
+  DB_PORT = os.environ["DB_PORT"]
 
 if "DB_ID" in os.environ:
-	DB_ID = os.environ["DB_ID"]
+  DB_ID = os.environ["DB_ID"]
 
 if "DB_PW" in os.environ:
-	DB_PW = os.environ["DB_PW"]
+  DB_PW = os.environ["DB_PW"]
 
 if "DEBUG" in os.environ:
-        DEBUG = os.environ["DEBUG"]
+  if os.environ["DEBUG"].lower()[0] == "y" or \
+     os.environ["DEBUG"].lower()[0] == "t":
+    DEBUG = True
+  elif os.environ["DEBUG"].lower()[0] == "y" or \
+       os.environ["DEBUG"].lower()[0] == "t":
+    DEBUG = False
 
 if "BIND_ADDR" in os.environ:
-        BIND_ADDR = os.environ["BIND_ADDR"]
+  BIND_ADDR = os.environ["BIND_ADDR"]
     
 app = Flask(__name__)
 conn = clairdb.conn_db(DB_IP,DB_PORT,DB_ID,DB_PW)

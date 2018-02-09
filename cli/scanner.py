@@ -1,12 +1,12 @@
 #!/usr/bin/python
-
-#Centos/RHEL
 fname = "/tmp/packages"
+
 import os
 import re
 import json
 import requests
 import sys
+import pprint
 
 def get_ostype():
   osid=""
@@ -97,14 +97,17 @@ def gen_request():
 def check(url, req):
   head= {"Accept":"applicaiton/json",
           "Content-type": "application/json"}
-  data = json.dumps(res)
-  print data
-  ret = requests.put(url, headers=head, data=data)
+  ret = requests.put(url, headers=head, data=json.dumps(req))
   print ret.status_code
   return json.loads(ret.text)
 
 if __name__ == '__main__':
-  if sys.argc <2:
+  if len(sys.argv) <2:
     print """%s server_host\nex) %s http://127.0.0.1:5000""" % (sys.argv[0],sys.argv[0],)
   else:
-    print check(sys.argv[1], gen_request())
+    res = check(sys.argv[1], gen_request())
+    for i in res:
+      print "========================================================="
+      pp = pprint.PrettyPrinter(indent=2)
+      pp.pprint(i)
+

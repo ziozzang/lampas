@@ -1,0 +1,40 @@
+version: '2'
+services:
+  pgsql:
+    container_name: pgsql
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+     - ./pgsql:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+
+  clair:
+    container_name: clair_clair
+    image: quay.io/coreos/clair-git:latest
+    restart: unless-stopped
+    depends_on:
+      - pgsql
+    ports:
+      - "6060-6061:6060-6061"
+    links:
+      - pgsql
+    volumes:
+      - /tmp:/tmp
+      - ./config.yml:/config/config.yaml
+    command: [-config, /config/config.yaml]
+
+  search-server:
+    container_name: search-server
+    image: ziozzang/clair-generic-scan-server
+    restart: unless-stopped
+    depends_on:
+     - pgsql
+    links:
+     - pgsql
+    ports:
+     - 5000:5000
+    environment:
+     DB_IP: pgsql
+     DB_PW: password
+
