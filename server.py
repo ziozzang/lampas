@@ -33,7 +33,7 @@ if "DB_PW" in os.environ:
 	DB_PW = os.environ["DB_PW"]
 
 if "DEBUG" in os.environ:
-        DB_PW = os.environ["DEBUG"]
+        DEBUG = os.environ["DEBUG"]
 
 if "BIND_ADDR" in os.environ:
         BIND_ADDR = os.environ["BIND_ADDR"]
