@@ -15,6 +15,9 @@ Clair Generic Scan Server (HTTP)
 
 * welcome any pull requests.
 
+# Demo
+* Demo is checking not only Host Ubuntu system but also inside centos docker container.
+[![asciicast](https://asciinema.org/a/s0fYjJrGbtYcl2rBPocozZR0c.png)](https://asciinema.org/a/s0fYjJrGbtYcl2rBPocozZR0c)
 
 # Author
 * Jioh L. Jung <ziozzang@gmail.com>: [linkedin.com/in/ziozzang](https://linkedin.com/in/ziozzang)
