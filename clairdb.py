@@ -12,6 +12,7 @@ def conn_db(DB_IP,DB_PORT,DB_ID,DB_PW):
   if type(DB_PORT) == type(0):
   	DB_PORT = str(DB_PORT)
   conn = psycopg2.connect("host='%s' port='%s' user='%s' password='%s'" % (DB_IP, DB_PORT, DB_ID, DB_PW))
+  conn.set_session(readonly=True)
   return conn
 
 def check(conn, osver, pkgs):
