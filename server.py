@@ -50,6 +50,7 @@ conn = clairdb.conn_db(DB_IP,DB_PORT,DB_ID,DB_PW)
 # Security Scanning
 @app.route('/', methods=['PUT', 'POST'])
 def check_security():
+    global conn
     body = request.get_json()#silent=True)
     print body["osver"]
     print body["packages"]
