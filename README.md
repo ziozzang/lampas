@@ -36,7 +36,8 @@ docker exec -it search-server python /opt/test.py
 ```
 
 * You can test on bare-metal using with cli client.
-    * prerequisit: python & requests module
+    * Python version prerequisit: python & requests module
+    * Golang version: Centos7 / RHEL 7 tested
 ```
 # Python version
 python ./cli/scanner.py http://127.0.0.1:5000

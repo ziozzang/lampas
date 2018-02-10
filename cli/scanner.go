@@ -25,14 +25,9 @@ func main() {
   cfg, err := ini.LoadSources(ini.LoadOptions{AllowBooleanKeys: true}, "/etc/os-release")
   os_id := strings.ToLower(cfg.Section("").Key("ID").String())
   os_ver := cfg.Section("").Key("VERSION_ID").String()
-  if (os_id == "redhat") { //Force set to centos
+
+  if (os_id == "rhel") { //Force set to centos
     os_id = "centos"
-  }
-  if (os_id == "alpine") {
-    vc := strings.Split(os_ver, ".")
-    os_str = fmt.Sprintf("%+v:v%+v.%+v", os_id, vc[0], vc[1])
-  } else {
-    os_str = fmt.Sprintf("%+v:%+v", os_id, os_ver)
   }
 
   switch os_id {
@@ -46,6 +41,17 @@ func main() {
       defer fmt.Println("Unknown System!")
       os.Exit(3)
   }
+
+  if (os_id == "alpine") {
+    vc := strings.Split(os_ver, ".")
+    os_str = fmt.Sprintf("%+v:v%+v.%+v", os_id, vc[0], vc[1])
+  } else if (os_id == "centos") {
+    vc := strings.Split(os_ver, ".")
+    os_str = fmt.Sprintf("%+v:%+v", os_id, vc[0])
+  } else {
+    os_str = fmt.Sprintf("%+v:%+v", os_id, os_ver)
+  }
+
 
   fmt.Println(os_str, pkg_type)
 

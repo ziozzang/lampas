@@ -36,6 +36,9 @@ def get_ostype():
   if osid == "alpine":
     t = osrel.split(".")
     osver = "%s:v%s.%s" % (osid, t[0], t[1])
+  elif ospkg == "rpm":
+    t = osrel.split(".")
+    osver = "%s:%s" % (osid, t[0])
   else:
     osver = "%s:%s" % (osid,osrel)
   return osver, ospkg
