@@ -15,6 +15,9 @@ Clair Generic Scan Server (HTTP)
 
 * welcome any pull requests.
 
+# Demo
+[![asciicast](https://asciinema.org/a/2H0AibIISapkM7Ijzx19wGY5G.png)](https://asciinema.org/a/2H0AibIISapkM7Ijzx19wGY5G)
+
 
 # Author
 * Jioh L. Jung <ziozzang@gmail.com>: [linkedin.com/in/ziozzang](https://linkedin.com/in/ziozzang)
