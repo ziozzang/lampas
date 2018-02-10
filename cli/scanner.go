@@ -1,3 +1,4 @@
+//=================================================================
 // Code by Jioh L. Jung <ziozzang@gmail.com>
 // This code is test purpose only.
 package main
@@ -17,6 +18,7 @@ import "github.com/Jeffail/gabs"
 import "github.com/go-ini/ini"
 
 func main() {
+  //=================================================================
   // Detect OS from /etc/os-release
   var os_str string = ""
   var pkg_type string = ""
@@ -53,47 +55,77 @@ func main() {
     fmt.Printf(" $ %s http://127.0.0.1:5000\n", os.Args[0])
     os.Exit(3)
   }
-  if (pkg_type  != "apt") {
-    fmt.Println("Current version only works with Apt Package system. / Ubuntu & Debian Only")
-    os.Exit(3)
-  }
-
 
   jobj := gabs.New()
   jobj.Set(os_str, "osver")
-  //-------------
-  // TODO: Need more work (Centos / RedHat /Alpine...)
-  cmd := exec.Command("sh","-c", "apt list --installed 2>/dev/null > /tmp/packages")
-  cmd.Start()
-  cmd.Wait()
 
-  file, err := os.Open("/tmp/packages")
-  if err != nil {
-    log.Fatal(err)
-  }
-  defer file.Close()
+  //=================================================================
+  // Parsing Installed Packages and its version
+  if (pkg_type == "apt") {
+    cmd := exec.Command("sh","-c", "apt list --installed 2>/dev/null > /tmp/packages")
+    cmd.Start()
+    cmd.Wait()
 
-  scanner := bufio.NewScanner(file)
-  for scanner.Scan() {
-    line := scanner.Text()
-    fields := strings.Split(line, " ")
-    if (len(fields) < 2) {
-      continue
+    file, err := os.Open("/tmp/packages")
+    if err != nil {
+      log.Fatal(err)
+    }
+    defer file.Close()
+
+    scanner := bufio.NewScanner(file)
+    for scanner.Scan() {
+      line := scanner.Text()
+      fields := strings.Split(line, " ")
+      if (len(fields) < 2) {
+        continue
+      }
+
+      pkgs := strings.Split(fields[0], "/")
+      p_ver := fmt.Sprintf("%+v", fields[1])
+      p_name :=  fmt.Sprintf("%+v", pkgs[0])
+      jobj.Set(p_ver, "packages", p_name)
+      fmt.Printf(">> %s: %s\n", p_name, p_ver)
     }
 
-    pkgs := strings.Split(fields[0], "/")
-    p_ver := fmt.Sprintf("%+v", fields[1])
-    p_name :=  fmt.Sprintf("%+v", pkgs[0])
-    jobj.Set(p_ver, "packages", p_name)
-    fmt.Printf(">> %s: %s\n", p_name, p_ver)
-  }
+    if err := scanner.Err(); err != nil {
+      log.Fatal(err)
+    }
+  } else if (pkg_type == "rpm") {
+    cmd := exec.Command("sh","-c", "rpm -qa --qf \"%{NAME} %{VERSION}-%{RELEASE}\\n\" > /tmp/packages")
+    cmd.Start()
+    cmd.Wait()
 
-  if err := scanner.Err(); err != nil {
-    log.Fatal(err)
+    file, err := os.Open("/tmp/packages")
+    if err != nil {
+      log.Fatal(err)
+    }
+    defer file.Close()
+
+    scanner := bufio.NewScanner(file)
+    for scanner.Scan() {
+      line := scanner.Text()
+      fields := strings.Split(line, " ")
+      if (len(fields) < 2) {
+        continue
+      }
+
+      jobj.Set(fields[1], "packages", fields[0])
+      fmt.Printf(">> %s: %s\n", fields[0], fields[1])
+    }
+
+    if err := scanner.Err(); err != nil {
+      log.Fatal(err)
+    }
+
+  } else if (pkg_type == "apk") {
+    fmt.Printf(">>> Alpine package manager is not support current version <<<")
+    os.Exit(3)
   }
 
   fmt.Println(jobj.StringIndent("", "  "))
 
+  //=================================================================
+  // Request Result to Server
   rbody := bytes.NewBufferString(jobj.String())
   resp, err := http.Post(os.Args[1], "application/json", rbody)
   if err != nil {
@@ -104,9 +136,22 @@ func main() {
 
   respBody, err := ioutil.ReadAll(resp.Body)
   if err == nil {
-    //Just Print : No Processing
-    str := string(respBody)
-    println(str)
+    jres, err := gabs.ParseJSON(respBody)
+    if err != nil {
+      panic(err)
+    }
+    fmt.Println("OS VER:",jres.Path("osver").String())
+    children, _ := jres.S("result").Children()
+    for _, child := range children {
+      fmt.Println("=================================")
+      children2, _ := child.ChildrenMap()
+      for key, child2 := range children2 {
+        if (key =="metadata") { // Skip metadata field.
+          continue
+        }
+        fmt.Printf("> %s: %s\n", key, child2.Data().(string))
+      }
+    }
   }
 
 }

@@ -41,20 +41,18 @@ def get_ostype():
   return osver, ospkg
 
 def pkg_rpm():
-  os.system("rpm -qa > %s" % fname)
-  m = re.compile("([a-z]{1}[\w\-\_\+]*?)-([0-9]{1}[\w\-\.\_]*)\.(x86_64|all|noarch)")
+  os.system('rpm -qa --qf "%%{NAME} %%{VERSION}-%%{RELEASE}\n" > %s' % fname)
   pkgs = {}
   for i in open(fname).readlines():
-    j = m.match(i.strip())
+    j = i.split()
     if j is None:
       print i
       continue
-    j = j.groups()
     pkgs[j[0]] = j[1] #.rsplit(".el",1)[0] # no strip tails
   return pkgs
 
 def pkg_apt():
-  os.system("apt list --installed > %s" % fname)
+  os.system("apt list --installed 2> /dev/null > %s" % fname)
   pkgs = {}
   for i in open(fname).readlines():
     j = i.split()
@@ -106,7 +104,8 @@ if __name__ == '__main__':
     print """%s server_host\nex) %s http://127.0.0.1:5000""" % (sys.argv[0],sys.argv[0],)
   else:
     res = check(sys.argv[1], gen_request())
-    for i in res:
+    print ">> ", res["osver"]
+    for i in res["result"]:
       print "========================================================="
       pp = pprint.PrettyPrinter(indent=2)
       pp.pprint(i)
