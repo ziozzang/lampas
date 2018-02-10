@@ -72,7 +72,7 @@ def check(conn, osver, pkgs):
           (v1,v2,av,pkgs[i],fv, i,j[cn.index("name")],j[cn.index("severity")])
         d = {}
         d["affected_version"] = av
-        if (av == "#MAXV#")
+        if av == "#MAXV#":
           d["affected_version"] = "#ALL_VERSION#"
         d["fixedin"] = fv
         d["requested_version"] = pv
