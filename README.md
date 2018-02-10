@@ -16,8 +16,8 @@ Clair Generic Scan Server (HTTP)
 * welcome any pull requests.
 
 # Demo
-[![asciicast](https://asciinema.org/a/2H0AibIISapkM7Ijzx19wGY5G.png)](https://asciinema.org/a/2H0AibIISapkM7Ijzx19wGY5G)
-
+* Demo is checking not only Host Ubuntu system but also inside centos docker container.
+<script src="https://asciinema.org/a/s0fYjJrGbtYcl2rBPocozZR0c.js" id="asciicast-s0fYjJrGbtYcl2rBPocozZR0c" async></script>
 
 # Author
 * Jioh L. Jung <ziozzang@gmail.com>: [linkedin.com/in/ziozzang](https://linkedin.com/in/ziozzang)
