@@ -53,6 +53,8 @@ def check_security():
     body = request.get_json()#silent=True)
     print body["osver"]
     print body["packages"]
+    if conn.closed != 0:
+        conn = clairdb.conn_db(DB_IP,DB_PORT,DB_ID,DB_PW)
     res = clairdb.check(conn, body["osver"],body["packages"])
     response = app.response_class(
         response=json.dumps(res),
