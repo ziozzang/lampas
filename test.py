@@ -58,4 +58,13 @@ pkgs = {
 print ("======================%s===================" % (osver,))
 print check(osver, pkgs)
 
+# Ask Dummy version
+osver="debian:8"
+pkgs = {
+    'libx11':'',
+    'libxml2':'',
+    'wget':'',
+}
+print ("======================%s===================" % (osver,))
+print check(osver, pkgs)
 

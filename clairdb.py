@@ -57,7 +57,11 @@ def check(conn, osver, pkgs):
       v2 = False
 
       #- Check issue is native bugs.
-      if av == "#MAXV#": # if MAXV is set ==> All Version.
+      if pv == "": # no version asked => Return All
+        v1 = True
+        v2 = True
+        pv = "#NOT_PROVIDED#"
+      elif av == "#MAXV#": # if MAXV is set ==> All Version.
         if fv == "": # No Fix release yet.
           v2 = True
         elif LooseVersion(pv) < LooseVersion(fv): # Current Version not Fixed
