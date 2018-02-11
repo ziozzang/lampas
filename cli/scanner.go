@@ -176,6 +176,15 @@ func main() {
 
   defer resp.Body.Close()
 
+  // If ignore flag supplied, only High "severity" && "fixedin" Exist will shown.
+  ignore_result := 0
+  if (len(os.Args) > 2) {
+    if (os.Args[2] == "ignore") {
+      ignore_result = 1
+    }
+  }
+
+  policy := 0 // Total policy violated count
   respBody, err := ioutil.ReadAll(resp.Body)
   if err == nil {
     jres, err := gabs.ParseJSON(respBody)
@@ -185,15 +194,28 @@ func main() {
     fmt.Println("OS VER:",jres.Path("osver").String())
     children, _ := jres.S("result").Children()
     for _, child := range children {
-      fmt.Println("=================================")
       children2, _ := child.ChildrenMap()
-      for key, child2 := range children2 {
-        if (key =="metadata") { // Skip metadata field.
-          continue
+      show := false
+      if (ignore_result == 0) {
+        show = true
+      }
+      if (strings.ToLower(children2["severity"].String()) == "high" &&
+          len(children2["fixedin"].String()) > 0) { //Policy Checking.
+        policy += 1
+        show = true
+      }
+      if (show) {
+        fmt.Println("=================================")
+        for key, child2 := range children2 {
+          if (key =="metadata") { // Skip metadata field.
+            continue
+          }
+          fmt.Printf("> %s: %s\n", key, child2.Data().(string))
         }
-        fmt.Printf("> %s: %s\n", key, child2.Data().(string))
       }
     }
   }
+  fmt.Println("=================================")
+  fmt.Printf(">> Total Security Policy violation : %d\n", policy)
 
 }

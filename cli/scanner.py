@@ -107,10 +107,22 @@ if __name__ == '__main__':
   if len(sys.argv) <2:
     print """%s server_host\nex) %s http://127.0.0.1:5000""" % (sys.argv[0],sys.argv[0],)
   else:
+    policy = 0
+    ignore_result = False
+    if len (sys.argv) > 2 and sys.argv[2] == "ignore":
+      ignore_result = True
     res = check(sys.argv[1], gen_request())
     print ">> ", res["osver"]
     for i in res["result"]:
-      print "========================================================="
-      pp = pprint.PrettyPrinter(indent=2)
-      pp.pprint(i)
-
+      show = False
+      if ignore_result == False:
+        show = True
+      if len(i["fixedin"]) > 0 and i["severity"].lower() == "high":
+        show = True
+        policy += 1
+      if show:
+        print "========================================================="
+        pp = pprint.PrettyPrinter(indent=2)
+        pp.pprint(i)
+  print "========================================================="
+  print "> Policy violation count: ", policy
