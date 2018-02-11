@@ -10,7 +10,7 @@ def check(osver,pkgs):
   data = json.dumps(res)
   print data
   ret = requests.put(url, headers=head, data=data)
-  print ret.status_code
+  assert(ret.status_code == 200)
   return json.loads(ret.text)
 
 osver = "alpine:v3.6"
@@ -20,17 +20,21 @@ pkgs = {
   'busybox':'1.26.2-r5',
 }
 print ("======================%s===================" % (osver,))
-print check(osver, pkgs)
+r = check(osver, pkgs)
+r1 = len(r['result'])
+print r1
 
 osver = "alpine:v3.6"
 pkgs = {
-  'musl':'1.1.16-r9',
-  'expat':'2.2.0-r0',
-  'busybox':'1.26.2-r5',
+  'musl':'',
+  'expat':'',
+  'busybox':'',
 }
 print ("======================%s===================" % (osver,))
-print check(osver, pkgs)
-
+r = check(osver, pkgs)
+r2 = len(r['result'])
+print r2
+assert(r1 <= r2)
 
 osver = "ubuntu:16.04"
 pkgs = {
@@ -38,7 +42,8 @@ pkgs = {
   'rsync':'3.1.1-3ubuntu1',
 }
 print ("======================%s===================" % (osver,))
-print check(osver, pkgs)
+r = check(osver, pkgs)
+print len(r['result'])
 
 osver ="centos:7"
 pkgs = {
@@ -46,7 +51,8 @@ pkgs = {
   'glibc-common':'2.17-157.el7_3.2',
 }
 print ("======================%s===================" % (osver,))
-print check(osver, pkgs)
+r = check(osver, pkgs)
+print len(r['result'])
 
 
 osver="debian:8"
@@ -56,7 +62,9 @@ pkgs = {
     'wget':'1.16-1',
 }
 print ("======================%s===================" % (osver,))
-print check(osver, pkgs)
+r = check(osver, pkgs)
+r1 = len(r['result'])
+print r1
 
 # Ask Dummy version
 osver="debian:8"
@@ -66,5 +74,8 @@ pkgs = {
     'wget':'',
 }
 print ("======================%s===================" % (osver,))
-print check(osver, pkgs)
+r = check(osver, pkgs)
+r2 = len(r['result'])
+print r2
+assert (r1 <= r2)
 
