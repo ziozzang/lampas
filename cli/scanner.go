@@ -10,6 +10,7 @@ import (
     "log"
     "os"
     "os/exec"
+    "regexp"
 )
 import "io/ioutil"
 import "fmt"
@@ -124,8 +125,37 @@ func main() {
     }
 
   } else if (pkg_type == "apk") {
-    fmt.Printf(">>> Alpine package manager is not support current version <<<")
-    os.Exit(3)
+    cmd := exec.Command("sh","-c", "apk info -vv 2>/dev/null > /tmp/packages")
+    cmd.Start()
+    cmd.Wait()
+
+    file, err := os.Open("/tmp/packages")
+    if err != nil {
+      log.Fatal(err)
+    }
+    defer file.Close()
+
+    scanner := bufio.NewScanner(file)
+    re := regexp.MustCompile(`([a-z]{1}[\w\-\_\+]*?)-([0-9]{1}[\w\-\.\_]*)`)
+    for scanner.Scan() {
+      line := scanner.Text()
+      fields := strings.Split(line, " - ")
+      if (len(fields) < 2) {
+        continue
+      }
+
+      //fmt.Printf("> %s\n>> %q\n", fields[0], re.FindAllStringSubmatch(fields[0], -1)[0])
+
+      pkgs := re.FindAllStringSubmatch(fields[0], -1)[0]
+      p_ver := fmt.Sprintf("%+v", pkgs[2])
+      p_name :=  fmt.Sprintf("%+v", pkgs[1])
+      jobj.Set(p_ver, "packages", p_name)
+      fmt.Printf(">> %s: %s\n", p_name, p_ver)
+    }
+
+    if err := scanner.Err(); err != nil {
+      log.Fatal(err)
+    }
   }
 
   fmt.Println(jobj.StringIndent("", "  "))
