@@ -92,6 +92,7 @@ def gen_request():
     pkg = pkg_apk()
   res["osver"] = ostype
   res["packages"] = pkg
+  os.system("rm -f %s" % fname)
   return res
 
 

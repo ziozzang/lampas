@@ -155,7 +155,14 @@ func main() {
     if err := scanner.Err(); err != nil {
       log.Fatal(err)
     }
+  } else {
+    fmt.Println(">>> Not Support Linux Distro. <<<")
+    os.Exit(3)
   }
+
+  cmd := exec.Command("sh","-c", "rm -f /tmp/packages")
+  cmd.Start()
+  cmd.Wait()
 
   fmt.Println(jobj.StringIndent("", "  "))
 
