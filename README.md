@@ -47,8 +47,13 @@ python ./cli/scanner.py http://127.0.0.1:5000
 
 # Golang version
 # - Build Binary
-docker run -it --rm -v `pwd`/cli:/usr/src/scanner -w /usr/src/scanner golang bash -c \
- "go get github.com/Jeffail/gabs && go get github.com/go-ini/ini && go build"
+ docker run -it --rm \
+  -v `pwd`/cli:/usr/src/scanner \
+  -w /usr/src/scanner \
+  -e "CGO_ENABLED=0" -e "GOOS=linux" \
+  golang bash -c  \
+  "go get github.com/Jeffail/gabs && go get github.com/go-ini/ini && go build -a -ldflags '-extldflags \"-static\"' ."
+
 # - Run
 ./cli/scanner http://127.0.0.1:5000
 
