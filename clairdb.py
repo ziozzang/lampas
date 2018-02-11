@@ -57,10 +57,9 @@ def check(conn, osver, pkgs):
       v2 = False
 
       #- Check issue is native bugs.
-      if pv == "": # no version asked => Return All
+      if len(pv) == 0: # no version asked => Return All
         v1 = True
         v2 = True
-        pv = "#NOT_PROVIDED#"
       elif av == "#MAXV#": # if MAXV is set ==> All Version.
         if fv == "": # No Fix release yet.
           v2 = True
@@ -81,6 +80,8 @@ def check(conn, osver, pkgs):
           d["affected_version"] = "#ALL_VERSION#"
         d["fixedin"] = fv
         d["requested_version"] = pv
+        if len(pv) == 0:
+          d["requested_version"] = "#NO_VERSION_INFO#"
         d["pkg_name"] = i
         d["cve_name"] = j[cn.index("name")]
         d["severity"] = j[cn.index("severity")]
