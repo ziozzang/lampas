@@ -136,7 +136,7 @@ func main() {
     defer file.Close()
 
     scanner := bufio.NewScanner(file)
-    re := regexp.MustCompile(`([a-z]{1}[\w\-\_\+]*?)-([0-9]{1}[\w\-\.\_]*)`)
+    re := regexp.MustCompile(`([a-z]{1}[\.\w\-\_\+]*?)-([0-9]{1}[\w\-\.\_]*)`)
     for scanner.Scan() {
       line := scanner.Text()
       fields := strings.Split(line, " - ")
@@ -145,7 +145,6 @@ func main() {
       }
 
       //fmt.Printf("> %s\n>> %q\n", fields[0], re.FindAllStringSubmatch(fields[0], -1)[0])
-
       pkgs := re.FindAllStringSubmatch(fields[0], -1)[0]
       p_ver := fmt.Sprintf("%+v", pkgs[2])
       p_name :=  fmt.Sprintf("%+v", pkgs[1])
