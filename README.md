@@ -57,6 +57,11 @@ python ./cli/scanner.py http://127.0.0.1:5000
   golang bash -c  \
   "go get github.com/Jeffail/gabs && go get github.com/go-ini/ini && go build -a -ldflags '-extldflags \"-static\"' ."
 
+# or you can use build scripts
+  cd cli
+  curl https://raw.githubusercontent.com/ziozzang/go-static-template/master/install | bash
+  BIN_NAME=scanner ./build.sh
+
 # - Run
 ./cli/scanner http://127.0.0.1:5000
 
