@@ -36,8 +36,8 @@ if "DEBUG" in os.environ:
   if os.environ["DEBUG"].lower()[0] == "y" or \
      os.environ["DEBUG"].lower()[0] == "t":
     DEBUG = True
-  elif os.environ["DEBUG"].lower()[0] == "y" or \
-       os.environ["DEBUG"].lower()[0] == "t":
+  elif os.environ["DEBUG"].lower()[0] == "n" or \
+       os.environ["DEBUG"].lower()[0] == "f":
     DEBUG = False
 
 if "BIND_ADDR" in os.environ:
