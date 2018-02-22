@@ -25,8 +25,8 @@ services:
     command: [-config, /config/config.yaml]
 
   search-server:
-    container_name: search-server
-    image: ziozzang/clair-generic-scan-server
+    container_name: lampas
+    image: ziozzang/lampas
     restart: unless-stopped
     depends_on:
      - pgsql
