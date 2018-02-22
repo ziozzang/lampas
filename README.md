@@ -2,6 +2,9 @@
 
 # TL;DR
 Lampas is for generic linux distro package security Scanner.
+* the meaning of lampas is came from latin word 'Lampas'
+* the word is from Ancient Greek λαμπάς (lampás, “lamp or flambeau”), from λάμπω (lámpō), perhaps from Proto-Indo-European *leh₂p- (“glow”)
+
 Clair Generic Scan Server (HTTP)
 
 * Lampas is renamed from "clair-generic-scan-server". Lampas is latin words which means lamp or lantern.
