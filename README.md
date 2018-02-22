@@ -1,7 +1,10 @@
-# clair-generic-scan-server
+# Lampas
 
 # TL;DR
+Lampas is for generic linux distro package security Scanner.
 Clair Generic Scan Server (HTTP)
+
+* Lampas is renamed from "clair-generic-scan-server". Lampas is latin words which means lamp or lantern.
 
 * You can scan any linux system not only docker but also bare-metal.
 * Clair use newest distro's NVD/CVE database. this means clair's DB is very accurated and fastest. There's no false negative or false positive issue.
@@ -34,7 +37,7 @@ cd compose
 docker-compose up -d
 
 # wait for DB updating is complated. (maybe 10-30 min. time depend on network issue)
-docker exec -it search-server python /opt/test.py
+docker exec -it lampas python /opt/test.py
 
 ```
 
